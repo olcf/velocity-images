@@ -1,0 +1,30 @@
+versions:
+  - spec: 5.7.1
+dependencies:
+  - spec: ubuntu@20.04:22.04
+    when: distro=ubuntu rocm@5.7.1
+  - spec: opensuse@15.4:15.5
+    when: distro=opensuse rocm@5.7.1
+  - spec: rockylinux@8.7:9.2
+    when: distro=rockylinux rocm@5.7.1
+templates:
+  - name: ubuntu
+    when: distro=ubuntu
+  - name: opensuse
+    when: distro=opensuse
+  - name: rockylinux
+    when: distro=rockylinux
+variables:
+  # ubuntu
+  - name: distro_codename
+    value: jammy
+    when: ubuntu@22.04
+    scope: build
+  - name: distro_codename
+    value: focal
+    when: ubuntu@20.04
+    scope: build
+  # opensuse
+  # rockylinux
+files:
+  - name: rocm_so.conf

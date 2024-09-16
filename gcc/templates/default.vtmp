@@ -1,0 +1,24 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=opensuse |> zypper --non-interactive install wget tar gzip gcc bzip2 gcc-c++ make && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install wget bzip2 build-essential cmake && apt clean ??
+    ?? distro=rockylinux |> dnf -y install wget bzip2 gcc gcc-g++ diffutils && dnf clean all ??
+    wget --progress=bar:force https://gcc.gnu.org/pub/gcc/releases/gcc-{{ __version__ }}/gcc-{{ __version__ }}.tar.gz
+    tar -xzf gcc-{{ __version__ }}.tar.gz
+    cd gcc-{{ __version__ }}
+    ./contrib/download_prerequisites
+    ./configure --enable-languages=c,c++,fortran --disable-multilib --prefix {{ prefix }}/{{ __version__ }}
+    make -j{{ __threads__ }}
+    make install
+    cd /
+    rm -rf gcc-{{ __version__ }}.tar.gz gcc-{{ __version__ }}
+
+@env
+    PATH {{ prefix }}/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib64:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
+    MANPATH {{ prefix }}/{{ __version__ }}/share/man:$MANPATH

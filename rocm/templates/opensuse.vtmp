@@ -1,0 +1,34 @@
+@from
+    {{ __base__ }}
+
+@copy
+    rocm_so.conf rocm_so.conf
+
+@run
+    >>> install perl
+    zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo
+    >>> amdgpu repo
+    echo "[amdgpu]" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    echo "name=amdgpu" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    echo "baseurl=https://repo.radeon.com/amdgpu/{{ __version__ }}/sle/{{ __opensuse__version__ }}/main/{{ __arch__ }}" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    echo "enabled=1" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    echo "gpgcheck=1" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    echo "gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" | tee --append /etc/zypp/repos.d/amdgpu.repo
+    >>> rocm repo
+    echo "[ROCm-{{ __version__ }}]" | tee --append /etc/zypp/repos.d/rocm.repo
+    echo "name=ROCm{{ __version__ }}" | tee --append /etc/zypp/repos.d/rocm.repo
+    echo "baseurl=https://repo.radeon.com/rocm/zyp/{{ __version__ }}/main" | tee --append /etc/zypp/repos.d/rocm.repo
+    echo "enabled=1" | tee --append /etc/zypp/repos.d/rocm.repo
+    echo "gpgcheck=1" | tee --append /etc/zypp/repos.d/rocm.repo
+    echo "gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" | tee --append /etc/zypp/repos.d/rocm.repo
+    >>> install ROCm
+    zypper --non-interactive --gpg-auto-import-keys refresh
+    zypper --non-interactive install rocm-hip-sdk{{ __version__ }}
+    zypper clean --all
+    >>> reload so cache
+    cat rocm_so.conf >> /etc/ld.so.conf.d/rocm.conf
+    rm rocm_so.conf
+    ldconfig
+
+@env
+    PATH $PATH:/opt/rocm-{{ __version__ }}/bin

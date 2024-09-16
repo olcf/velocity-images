@@ -1,0 +1,23 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=ubuntu |> apt -y install {{ packages }} && apt clean ??
+    ?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
+    ?? distro=rockylinux |> dnf -y install {{ packages }} && dnf clean all ??
+    wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
+    tar xzf mpich-{{ __version__ }}.tar.gz
+    cd mpich-{{ __version__ }}
+    ./configure --with-device=ch4:ofi --prefix={{ prefix }}/{{ __version__ }} FFLAGS=-fallow-argument-mismatch
+    make install -j{{ __threads__ }}
+    cd /
+    rm -rf mpich-{{ __version__ }}/ mpich-{{ __version__ }}.tar.gz
+
+@env
+    MPICH_VERSION {{ __version__ }}
+    MPICH_URL https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
+    MPICH_DIR {{ prefix }}/{{ __version__ }}
+    PATH {{ prefix }}/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib:$LD_LIBRARY_PATH
+    MANPATH {{ prefix }}/{{ __version__ }}/share/man:$MANPATH

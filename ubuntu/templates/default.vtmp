@@ -1,0 +1,8 @@
+@from
+    docker.io/ubuntu:{{ __version__ }}
+
+@run
+    !envar DEBIAN_FRONTEND noninteractive
+    apt -y update
+    apt -y upgrade
+    apt clean

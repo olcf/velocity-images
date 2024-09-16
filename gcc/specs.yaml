@@ -1,0 +1,15 @@
+versions:
+  - spec:
+      - 12.3.0
+      - 13.2.0
+      - 14.1.0
+dependencies:
+  - spec: ubuntu
+    when: distro=ubuntu
+  - spec: opensuse
+    when: distro=opensuse
+  - spec: rockylinux
+    when: distro=rockylinux
+variables:
+  - name: prefix
+    value: "/opt"

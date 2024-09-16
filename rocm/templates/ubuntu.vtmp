@@ -1,0 +1,26 @@
+@from
+    {{ __base__ }}
+
+@copy
+    rocm_so.conf rocm_so.conf
+
+@run
+    >>> get repo key
+    apt -y install apt-utils wget gpg
+    mkdir --parents --mode=0755 /etc/apt/keyrings
+    wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | gpg --dearmor | tee /etc/apt/keyrings/rocm.gpg > /dev/null
+    >>> add repos
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/{{ __version__ }}/ubuntu {{ distro_codename }} main" | tee --append /etc/apt/sources.list.d/amdgpu.list
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/{{ __version__ }} {{ distro_codename }} main" | tee --append /etc/apt/sources.list.d/rocm.list
+    echo 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' | tee /etc/apt/preferences.d/rocm-pin-600
+    >>> install ROCm
+    apt update
+    apt -y install rocm-hip-sdk{{ __version__ }}
+    apt clean
+    >>> reload so cache
+    cat rocm_so.conf >> /etc/ld.so.conf.d/rocm.conf
+    rm rocm_so.conf
+    ldconfig
+
+@env
+    PATH $PATH:/opt/rocm-{{ __version__ }}/bin

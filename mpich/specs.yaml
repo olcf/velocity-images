@@ -1,0 +1,36 @@
+versions:
+  - spec: 3.4.3
+dependencies:
+  - spec: ubuntu
+    when: distro=ubuntu
+  - spec: opensuse
+    when: distro=opensuse
+  - spec: rockylinux
+    when: distro=rockylinux
+  - spec: gcc
+    when: gcc
+    scope: build
+variables:
+  - name: prefix
+    value: "/opt"
+  # ubuntu packages
+  - name: packages
+    value: "wget gcc g++ gfortran make"
+    when: distro=ubuntu
+  - name: packages
+    value: "wget make"
+    when: distro=ubuntu ^gcc
+  # opensuse packages
+  - name: packages
+    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make"
+    when: distro=opensuse
+  - name: packages
+    value: "wget tar gzip file make"
+    when: distro=opensuse ^gcc
+  # rockylinux packages
+  - name: packages
+    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl"
+    when: distro=rockylinux
+  - name: packages
+    value: "wget diffutils file perl"
+    when: distro=rockylinux ^gcc
