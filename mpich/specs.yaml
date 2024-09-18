@@ -10,6 +10,9 @@ dependencies:
   - spec: gcc
     when: gcc
     scope: build
+  - spec: rocm
+    when: rocm
+    scope: build
 variables:
   - name: prefix
     value: "/opt"

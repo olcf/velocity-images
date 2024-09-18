@@ -5,8 +5,10 @@
     rocm_so.conf rocm_so.conf
 
 @run
-    >>> install perl
+    >>> install perl & gzip (keeps the busybox install from being used)
     zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo
+    zypper --non-interactive --gpg-auto-import-keys refresh
+    zypper --non-interactive install gzip
     >>> amdgpu repo
     echo "[amdgpu]" | tee --append /etc/zypp/repos.d/amdgpu.repo
     echo "name=amdgpu" | tee --append /etc/zypp/repos.d/amdgpu.repo
