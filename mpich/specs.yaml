@@ -13,6 +13,9 @@ dependencies:
   - spec: rocm
     when: rocm
     scope: build
+  - spec: llvm
+    when: llvm
+    scope: build
 variables:
   - name: prefix
     value: "/opt"

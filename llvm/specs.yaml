@@ -1,0 +1,22 @@
+versions:
+  - spec:
+      - 17.0.0
+      - 17.0.6
+dependencies:
+  - spec: ubuntu
+    when: distro=ubuntu
+  - spec: opensuse
+    when: distro=opensuse
+  - spec: rockylinux
+    when: distro=rockylinux
+variables:
+  - name: prefix
+    value: /opt
+  - name: build_type
+    value: Release
+  - name: enabled_targets
+    value: X86
+  - name: enabled_projects
+    value: "clang;lld;openmp;compiler-rt"
+  - name: enabled_runtimes
+    value: "libcxx;libcxxabi;libunwind"

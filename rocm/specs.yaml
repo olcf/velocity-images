@@ -1,12 +1,22 @@
 versions:
-  - spec: 5.7.1
+  - spec: 
+      - 5.7.1
+      - 6.0.1
+      - 6.1.3
 dependencies:
+  # ubuntu
   - spec: ubuntu@20.04:22.04
-    when: distro=ubuntu rocm@5.7.1
+    when: distro=ubuntu rocm@5.7.1:6.1.3
+  # opensuse
   - spec: opensuse@15.4:15.5
-    when: distro=opensuse rocm@5.7.1
+    when: distro=opensuse rocm@5.7.1:6.1.3
+  # rockylinux
   - spec: rockylinux@8.7:9.2
     when: distro=rockylinux rocm@5.7.1
+  - spec: rockylinux@8.8:9.3
+    when: distro=rockylinux rocm@6.0.1
+  - spec: rockylinux@8.8:9.4
+    when: distro=rockylinux rocm@6.1.3
 templates:
   - name: ubuntu
     when: distro=ubuntu

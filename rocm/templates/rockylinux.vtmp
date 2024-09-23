@@ -38,4 +38,4 @@
     ldconfig
 
 @env
-    PATH $PATH:/opt/rocm-%(__tag__)/bin
+    PATH $PATH:/opt/rocm-{{ __version__ }}/bin
