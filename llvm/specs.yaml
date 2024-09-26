@@ -1,7 +1,7 @@
 versions:
   - spec:
-      - 17.0.0
       - 17.0.6
+      - 18.1.6
 dependencies:
   - spec: ubuntu
     when: distro=ubuntu
