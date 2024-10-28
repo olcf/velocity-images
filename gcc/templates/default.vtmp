@@ -9,16 +9,16 @@
     tar -xzf gcc-{{ __version__ }}.tar.gz
     cd gcc-{{ __version__ }}
     ./contrib/download_prerequisites
-    ./configure --enable-languages=c,c++,fortran --disable-multilib --prefix {{ prefix }}/{{ __version__ }}
+    ./configure --enable-languages=c,c++,fortran --disable-multilib --prefix {{ prefix }}/gcc/{{ __version__ }}
     make -j{{ __threads__ }}
     make install
     cd /
     rm -rf gcc-{{ __version__ }}.tar.gz gcc-{{ __version__ }}
 
 @env
-    PATH {{ prefix }}/{{ __version__ }}/bin:$PATH
-    LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib64:$LIBRARY_PATH
-    LD_LIBRARY_PATH {{ prefix }}/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
-    C_INCLUDE_PATH {{ prefix }}/{{ __version__ }}/include:$C_INCLUDE_PATH
-    CPLUS_INCLUDE_PATH {{ prefix }}/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
-    MANPATH {{ prefix }}/{{ __version__ }}/share/man:$MANPATH
+    PATH {{ prefix }}/gcc/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/gcc/{{ __version__ }}/lib64:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/gcc/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/gcc/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/gcc/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
+    MANPATH {{ prefix }}/gcc/{{ __version__ }}/share/man:$MANPATH

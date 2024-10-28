@@ -11,7 +11,7 @@ dependencies:
     when: distro=rockylinux
 variables:
   - name: prefix
-    value: /opt
+    value: "/opt"
   - name: build_type
     value: Release
   - name: enabled_targets
