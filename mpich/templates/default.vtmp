@@ -6,8 +6,8 @@
     ?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
     ?? distro=rockylinux |> dnf -y install {{ packages }} && dnf clean all ??
     >>> test gcc version and add fortran flag if gcc version >= 10
-    if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then 
-        export FFLAGS=-fallow-argument-mismatch
+    if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then \
+        export FFLAGS=-fallow-argument-mismatch; \
     fi
     >>> install
     wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
