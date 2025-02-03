@@ -13,3 +13,14 @@ dependencies:
 variables:
   - name: prefix
     value: "/opt"
+  - name: __threads__
+    value: 1
+    when: backend=openshift
+prologs:
+  - script: |
+      cp script Dockerfile; 
+      if ! ${__backend_executable__} get buildconfigs v-${__image_id__}; then 
+          ${__backend_executable__} new-build . --name=v-${__image_id__} --to=v-${__image_id__}:latest;
+          ${__backend_executable__} patch buildconfig/v-${__image_id__} --patch '{"spec":{"resources":{"limits":{"memory":"2Gi"}}}}';
+      fi;
+    when: backend=openshift
