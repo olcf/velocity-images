@@ -1,7 +1,8 @@
 @from
-    docker.io/opensuse/leap:{{ __version__ }}
+    registry.opensuse.org/opensuse/leap:{{ __version__ }}
 
 @run
     zypper --non-interactive refresh
     zypper --non-interactive update
     zypper clean --all
+

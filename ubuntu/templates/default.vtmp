@@ -3,6 +3,7 @@
 
 @run
     !envar DEBIAN_FRONTEND noninteractive
-    apt -y update --fix-missing
+    apt update --fix-missing
     apt -y upgrade
     apt clean
+

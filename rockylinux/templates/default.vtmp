@@ -1,6 +1,7 @@
 @from
-    docker.io/rockylinux:{{ __version__ }}
+    docker.io/rockylinux/rockylinux:{{ __version__ }}
 
 @run
     dnf -y upgrade
     dnf clean all
+

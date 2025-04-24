@@ -10,27 +10,19 @@
     wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
     rpm -ivh epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
     rm epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
-    dnf -y install 'dnf-command(config-manager)'
+    dnf -y install dnf-plugin-config-manager
     crb enable
-    >>> amdgpu repo
-    echo "[amdgpu]" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "name=amdgpu" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "baseurl=https://repo.radeon.com/amdgpu/{{ __version__ }}/rhel/{{ __rockylinux__version__ }}/main/{{ __arch__ }}" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "enabled=1" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "priority=50" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "gpgcheck=1" | tee --append /etc/yum.repos.d/amdgpu.repo
-    echo "gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" | tee --append /etc/yum.repos.d/amdgpu.repo
     >>> rocm repo
     echo "[ROCm-{{ __version__ }}]" | tee --append /etc/yum.repos.d/rocm.repo
     echo "name=ROCm{{ __version__ }}" | tee --append /etc/yum.repos.d/rocm.repo
-    echo "baseurl=https://repo.radeon.com/rocm/rhel{{ __rockylinux__version_major__ }}/{{ __version__ }}/main" | tee --append /etc/yum.repos.d/rocm.repo
+    echo "baseurl=https://repo.radeon.com/rocm/el{{ __rockylinux__version_major__ }}/{{ repo_version }}/main" | tee --append /etc/yum.repos.d/rocm.repo
     echo "enabled=1" | tee --append /etc/yum.repos.d/rocm.repo
     echo "priority=50" | tee --append /etc/yum.repos.d/rocm.repo
     echo "gpgcheck=1" | tee --append /etc/yum.repos.d/rocm.repo
     echo "gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" | tee --append /etc/yum.repos.d/rocm.repo
-    >>> install ROCm
     dnf clean all
-    dnf -y install rocm-hip-sdk{{ __version__ }}
+    >>> install ROCm
+    dnf -y install {{ package_name }}{{ __version__ }}
     dnf clean all
     >>> reload so cache
     cat rocm_so.conf >> /etc/ld.so.conf.d/rocm.conf
@@ -38,4 +30,6 @@
     ldconfig
 
 @env
-    PATH $PATH:/opt/rocm-{{ __version__ }}/bin
+    PATH /opt/rocm-{{ __version__ }}/bin:${PATH}
+    LD_LIBRARY_PATH /opt/rocm-{{ __version__ }}/lib:${LD_LIBRARY_PATH}
+
