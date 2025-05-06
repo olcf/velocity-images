@@ -3,6 +3,7 @@ versions:
       - 12.3.0
       - 13.2.0
       - 14.1.0
+      - 14.2.0
 dependencies:
   - spec: opensuse
     when: distro=opensuse
