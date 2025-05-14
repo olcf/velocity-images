@@ -5,11 +5,10 @@
     >>> ubuntu
     ?? distro=ubuntu |> apt -y install wget cmake g++ python3 libencode-perl && apt clean ??
     >>> opensuse
-    ?? distro=opensuse |> zypper repos -E | grep devel_languages_perl ??
-    ?? distro=opensuse |> if [ "$?" -eq "1" ]; then zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo && zypper --non-interactive --gpg-auto-import-keys refresh; fi ??
+    ?? distro=opensuse |> if ! zypper repos -E | grep devel_languages_perl; then zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo && zypper --non-interactive --gpg-auto-import-keys refresh; fi ??
     ?? distro=opensuse |> zypper --non-interactive install wget tar gzip cmake gcc-c++ perl-URI-Encode && zypper clean --all ??
     >>> rocklinux
-    ?? distro=rockylinux |> dnf -y install wget cmake && dnf clean all ??
+    ?? distro=rockylinux |> dnf -y install wget cmake gcc gcc-g++ perl && dnf clean all ??
     >>> INSTALL
     wget https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ __version__ }}.tar.gz
     tar xzf llvmorg-{{ __version__ }}.tar.gz
@@ -24,7 +23,7 @@
     -DLLVM_ENABLE_RUNTIMES='{{ enabled_runtimes }}'
     cmake --build build -j{{ __threads__ }}
     cmake --build build --target install
-    cd / && rm -rf llvmorg-{{ __version__ }}.tar.gz llvm-project-llvmorg-{{ __version__ }} 
+    cd / && rm -rf llvmorg-{{ __version__ }}.tar.gz llvm-project-llvmorg-{{ __version__ }}
 
 @env
     >>> PATH
