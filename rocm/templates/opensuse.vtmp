@@ -6,7 +6,9 @@
 
 @run
     >>> add supplementary repos
-    zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo
+    if ! zypper repos -E | grep devel_languages_perl; then \
+        zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo; \
+    fi
     >>> add ROCm repo
     echo "[ROCm-{{ __version__ }}]" | tee --append /etc/zypp/repos.d/rocm.repo
     echo "name=ROCm{{ __version__ }}" | tee --append /etc/zypp/repos.d/rocm.repo
