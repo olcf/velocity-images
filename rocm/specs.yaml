@@ -29,8 +29,16 @@ dependencies:
   - spec: opensuse
     when: distro=opensuse
   # rockylinux
-  - spec: rockylinux
-    when: distro=rockylinux
+  - spec: rockylinux@8.8:9.2
+    when: distro=rockylinux rocm@5.7:5.7.3
+  - spec: rockylinux@8.8:9.3
+    when: distro=rockylinux rocm@6.0
+  - spec: rockylinux@8.8:9.4
+    when: distro=rockylinux rocm@6.1:6.2
+  - spec: rockylinux@8.8:9.5
+    when: distro=rockylinux rocm@6.3
+  - spec: rockylinux@8.8:9.6
+    when: "distro=rockylinux rocm@6.4:"
 templates:
   - name: ubuntu
     when: distro=ubuntu

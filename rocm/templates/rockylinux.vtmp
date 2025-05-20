@@ -12,7 +12,14 @@
     rm epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
     dnf -y install dnf-plugin-config-manager
     crb enable
-    >>> rocm repo
+    >>> add AMDGPU repo
+    echo "[AMDGPU-{{ __version__ }}]" | tee --append /etc/yum.repos.d/amdgpu.repo
+    echo "name=AMDGPU{{ __version__ }}" | tee --append /etc/yum.repos.d/amdgpu.repo
+    echo "baseurl=https://repo.radeon.com/amdgpu/{{ __version__ }}/rhel/{{ __rockylinux__version__ }}/main/{{ __arch__ }}/" | tee --append /etc/yum.repos.d/amdgpu.repo
+    echo "enabled=1" | tee --append /etc/yum.repos.d/amdgpu.repo
+    echo "gpgcheck=1" | tee --append /etc/yum.repos.d/amdgpu.repo
+    echo "gpgkey=https://repo.radeon.com/rocm/rocm.gpg.key" | tee --append /etc/yum.repos.d/amdgpu.repo
+    >>> add ROCm repo
     echo "[ROCm-{{ __version__ }}]" | tee --append /etc/yum.repos.d/rocm.repo
     echo "name=ROCm{{ __version__ }}" | tee --append /etc/yum.repos.d/rocm.repo
     echo "baseurl=https://repo.radeon.com/rocm/el{{ __rockylinux__version_major__ }}/{{ repo_version }}/main" | tee --append /etc/yum.repos.d/rocm.repo
