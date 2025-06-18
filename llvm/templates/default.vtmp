@@ -5,7 +5,7 @@
     >>> ubuntu
     ?? distro=ubuntu |> apt -y install wget cmake g++ python3 libencode-perl && apt clean ??
     >>> opensuse
-    ?? distro=opensuse |> if ! zypper repos -E | grep devel_languages_perl; then zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo && zypper --non-interactive --gpg-auto-import-keys refresh; fi ??
+    ?? distro=opensuse |> if ! zypper repos -E | grep devel_languages_perl; then zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/SLE_15_SP7/devel:languages:perl.repo && zypper --non-interactive --gpg-auto-import-keys refresh; fi ??
     ?? distro=opensuse |> zypper --non-interactive install wget tar gzip cmake gcc-c++ perl-URI-Encode python311 && zypper clean --all ??
     >>> rocklinux
     ?? distro=rockylinux |> dnf -y install wget cmake gcc gcc-g++ perl && dnf clean all ??

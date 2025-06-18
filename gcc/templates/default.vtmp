@@ -4,7 +4,7 @@
 @run
     ?? distro=opensuse |> zypper --non-interactive install wget tar gzip gcc bzip2 gcc-c++ make perl && zypper clean --all ??
     ?? distro=ubuntu |> apt -y install wget bzip2 build-essential cmake && apt clean ??
-    ?? distro=rockylinux |> dnf -y install wget bzip2 gcc gcc-g++ diffutils && dnf clean all ??
+    ?? distro=rockylinux |> dnf -y install wget bzip2 gcc gcc-g++ diffutils perl && dnf clean all ??
     wget --progress=bar:force https://gcc.gnu.org/pub/gcc/releases/gcc-{{ __version__ }}/gcc-{{ __version__ }}.tar.gz
     tar -xzf gcc-{{ __version__ }}.tar.gz
     cd gcc-{{ __version__ }}
