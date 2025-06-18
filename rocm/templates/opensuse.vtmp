@@ -7,7 +7,7 @@
 @run
     >>> add supplementary repos
     if ! zypper repos -E | grep devel_languages_perl; then \
-        zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/{{ __opensuse__version__ }}/devel:languages:perl.repo; \
+        zypper --non-interactive addrepo https://download.opensuse.org/repositories/devel:/languages:/perl/SLE_15_SP7/devel:languages:perl.repo; \
     fi
     >>> add AMDGPU repo
     echo "[AMDGPU-{{ __version__ }}]" | tee --append /etc/zypp/repos.d/amdgpu.repo

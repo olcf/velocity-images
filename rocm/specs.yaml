@@ -26,8 +26,12 @@ dependencies:
   - spec: ubuntu@22.04:24.04
     when: "distro=ubuntu rocm@6.4:"
   # opensuse
-  - spec: opensuse
-    when: distro=opensuse
+  - spec: opensuse@15.4:15.5
+    when: distro=opensuse rocm@5.7:5
+  - spec: opensuse@15.5.15.6
+    when: distro=opensuse rocm@6.0:6.3
+  - spec: opensuse@15.6:15.7
+    when: "distro=opensuse rocm@6.4:"
   # rockylinux
   - spec: rockylinux@8.8:9.2
     when: distro=rockylinux rocm@5.7:5.7.3
