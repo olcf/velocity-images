@@ -2,9 +2,13 @@
     {{ __base__ }}
 
 @run
-    ?? distro=opensuse |> zypper --non-interactive install wget tar gzip gcc bzip2 gcc-c++ make perl && zypper clean --all ??
-    ?? distro=ubuntu |> apt -y install wget bzip2 build-essential cmake && apt clean ??
-    ?? distro=rockylinux |> dnf -y install wget bzip2 gcc gcc-g++ diffutils perl && dnf clean all ??
+    ?? distro=opensuse |> zypper --non-interactive install gcc gcc-c++ gcc-fortran && zypper clean --all ??
+    ?? distro=rockylinux |> dnf -y install gcc gcc-g++ gcc-gfortran && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install gcc g++ gfortran && apt clean ??
+    if [ "0.0.0-system" = "{{ __version__ }}" ]; then exit 0; fi
+    ?? distro=opensuse |> zypper --non-interactive install wget tar gzip bzip2 make perl && zypper clean --all ??
+    ?? distro=rockylinux |> dnf -y install wget bzip2 diffutils perl && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install wget bzip2 cmake && apt clean ??
     wget --progress=bar:force https://gcc.gnu.org/pub/gcc/releases/gcc-{{ __version__ }}/gcc-{{ __version__ }}.tar.gz
     tar -xzf gcc-{{ __version__ }}.tar.gz
     cd gcc-{{ __version__ }}

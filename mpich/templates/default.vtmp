@@ -2,9 +2,9 @@
     {{ __base__ }}
 
 @run
-    ?? distro=ubuntu |> apt -y install {{ packages }} && apt clean ??
-    ?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
-    ?? distro=rockylinux |> dnf -y install {{ packages }} && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 && apt clean ??
+    ?? distro=opensuse |> zypper --non-interactive install wget tar gzip file make && zypper clean --all ??
+    ?? distro=rockylinux |> dnf -y install wget diffutils file perl && dnf clean all ??
     >>> test gcc version and add fortran flag if gcc version >= 10
     if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then \
         export FFLAGS=-fallow-argument-mismatch; \
@@ -13,7 +13,7 @@
     wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     tar xzf mpich-{{ __version__ }}.tar.gz
     cd mpich-{{ __version__ }}
-    ./configure --with-device=ch4:ofi --prefix={{ prefix }}/mpich/{{ __version__ }} {{ rocm_flags }}
+    ./configure --with-device=ch4:{{ netmod }} --prefix={{ prefix }}/mpich/{{ __version__ }} {{ rocm_flags }}
     make install -j{{ __threads__ }}
     cd /
     rm -rf mpich-{{ __version__ }}/ mpich-{{ __version__ }}.tar.gz

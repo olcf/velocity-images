@@ -1,5 +1,7 @@
 versions:
-  - spec: 3.4.3
+  - spec:
+      - 3.4.3
+      - 4.3.0
 dependencies:
   - spec: ubuntu
     when: distro=ubuntu
@@ -8,13 +10,14 @@ dependencies:
   - spec: rockylinux
     when: distro=rockylinux
   - spec: gcc
-    when: gcc
-    scope: build
   - spec: rocm
     when: rocm
     scope: build
   - spec: llvm
     when: llvm
+    scope: build
+  - spec: ucx
+    when: ucx
     scope: build
 variables:
   - name: prefix
@@ -23,24 +26,9 @@ variables:
     value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}/hip'
     when: rocm
     scope: build
-  # ubuntu packages
-  - name: packages
-    value: "wget gcc g++ gfortran make"
-    when: distro=ubuntu
-  - name: packages
-    value: "wget make"
-    when: distro=ubuntu ^gcc
-  # opensuse packages
-  - name: packages
-    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make"
-    when: distro=opensuse
-  - name: packages
-    value: "wget tar gzip file make"
-    when: distro=opensuse ^gcc
-  # rockylinux packages
-  - name: packages
-    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl"
-    when: distro=rockylinux
-  - name: packages
-    value: "wget diffutils file perl"
-    when: distro=rockylinux ^gcc
+  - name: netmod
+    value: ofi
+  - name: netmod
+    value: ucx
+    when: ucx
+    scope: build

@@ -1,0 +1,20 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=ubuntu |> apt -y install {{ ubuntu_packages }} && apt clean ??
+    wget https://github.com/openucx/ucx/releases/download/v{{ __version__ }}/ucx-{{ __version__ }}.tar.gz
+    tar -xzf ucx-{{ __version__ }}.tar.gz
+    mkdir build && cd build
+    ../ucx-{{ __version__ }}/contrib/configure-release --prefix={{ prefix }}/ucx/{{ __version__ }} \
+        {{ build_options }}
+    echo "UCX {{ __version__ }}"
+
+@env
+    UCX_VERSION {{ __version__ }}
+    PATH {{ prefix }}/ucx/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/ucx/{{ __version__ }}/lib64:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/ucx/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/ucx/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/ucx/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
+    MANPATH {{ prefix }}/ucx/{{ __version__ }}/share/man:$MANPATH
