@@ -3,7 +3,7 @@
 
 @run
     ?? distro=opensuse |> zypper --non-interactive install gcc gcc-c++ gcc-fortran && zypper clean --all ??
-    ?? distro=rockylinux |> dnf -y install gcc gcc-g++ gcc-gfortran && dnf clean all ??
+    ?? distro=rockylinux |> dnf -y install gcc gcc-c++ gcc-gfortran && dnf clean all ??
     ?? distro=ubuntu |> apt -y install gcc g++ gfortran && apt clean ??
     if [ "0.0.0-system" = "{{ __version__ }}" ]; then exit 0; fi
     ?? distro=opensuse |> zypper --non-interactive install wget tar gzip bzip2 make perl && zypper clean --all ??

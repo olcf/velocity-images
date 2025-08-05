@@ -1,0 +1,11 @@
+versions:
+  - spec:
+      - 0.0.0-latest
+dependencies:
+  - spec: opensuse
+    when: distro=opensuse
+  - spec: rockylinux
+    when: distro=rockylinux
+  - spec: ubuntu
+    when: distro=ubuntu
+  - spec: gcc@0

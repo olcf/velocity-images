@@ -1,0 +1,25 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=ubuntu |> apt -y install git make autoconf automake linux-headers-$(uname -r) kmod pkg-config && apt clean ??
+    >>>?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
+    >>>?? distro=rockylinux |> dnf -y install {{ packages }} && dnf clean all ??
+    >>> install
+    git clone https://gitlab.inria.fr/knem/knem.git
+    cd knem
+    ./autogen.sh
+    ./configure
+    make
+    make install
+    /opt/knem/sbin/knem_local_install
+    cd .. && rm -r knem
+
+@env
+    KNEM_VERSION {{ __version__ }}
+    PATH /opt/knem/bin:$PATH
+    LIBRARY_PATH /opt/knem/lib64:$LIBRARY_PATH
+    LD_LIBRARY_PATH /opt/knem/lib64:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH /opt/knem/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH /opt/knem/include:$CPLUS_INCLUDE_PATH
+    MANPATH /opt/knem/share/man:$MANPATH
