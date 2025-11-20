@@ -23,26 +23,30 @@ variables:
     value: "/opt"
   - name: rocm_flags
     value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}/hip'
-    when: rocm
+    when: rocm@:5
+    scope: build
+  - name: rocm_flags
+    value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}'
+    when: "rocm@6:"
     scope: build
   # ubuntu packages
   - name: packages
-    value: "wget gcc g++ gfortran make"
+    value: "wget gcc g++ gfortran make python3"
     when: distro=ubuntu
   - name: packages
-    value: "wget make"
+    value: "wget make python3"
     when: distro=ubuntu ^gcc
   # opensuse packages
   - name: packages
-    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make"
+    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make python3"
     when: distro=opensuse
   - name: packages
-    value: "wget tar gzip file make"
+    value: "wget tar gzip file make python3"
     when: distro=opensuse ^gcc
   # rockylinux packages
   - name: packages
-    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl"
+    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl python3"
     when: distro=rockylinux
   - name: packages
-    value: "wget diffutils file perl"
+    value: "wget diffutils file perl python3"
     when: distro=rockylinux ^gcc
