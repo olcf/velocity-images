@@ -38,17 +38,17 @@ variables:
     when: distro=ubuntu ^gcc
   # opensuse packages
   - name: packages
-    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make python3"
+    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make python3 patch"
     when: distro=opensuse
   - name: packages
-    value: "wget tar gzip file make python3"
+    value: "wget tar gzip file make python3 patch"
     when: distro=opensuse ^gcc
   # rockylinux packages
   - name: packages
-    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl python3"
+    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl python3 patch"
     when: distro=rockylinux
   - name: packages
-    value: "wget diffutils file perl python3"
+    value: "wget diffutils file perl python3 patch"
     when: distro=rockylinux ^gcc
 files:
   - name: mpich.patch
