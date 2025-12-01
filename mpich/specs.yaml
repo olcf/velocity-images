@@ -50,3 +50,7 @@ variables:
   - name: packages
     value: "wget diffutils file perl python3"
     when: distro=rockylinux ^gcc
+files:
+  - name: mpich.patch
+  - name: yaksa.patch
+

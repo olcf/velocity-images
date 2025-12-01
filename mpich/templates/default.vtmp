@@ -1,6 +1,10 @@
 @from
     {{ __base__ }}
 
+@copy
+    mpich.patch /mpich.patch
+    yaksa.patch /yaksa.patch
+
 @run
     ?? distro=ubuntu |> apt -y install {{ packages }} && apt clean ??
     ?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
@@ -13,6 +17,14 @@
     wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     tar xzf mpich-{{ __version__ }}.tar.gz
     cd mpich-{{ __version__ }}
+    >>> TEST
+    if [ "{{ __rocm__version_major__ }}" > "5" ] && [ "{{ __version__ }}" = "4.1.3" ]; then \
+        patch -p1 < /mpich.patch; \
+        cd modules/yaksa; \
+        patch -p1 < /yaksa.patch; \
+        cd ../..; \
+    fi
+    >>> TEST
     ./configure --with-device=ch4:ofi --prefix={{ prefix }}/mpich/{{ __version__ }} {{ rocm_flags }}
     make install -j{{ __threads__ }}
     cd /

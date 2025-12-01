@@ -1,0 +1,37 @@
+diff --git a/src/mpl/src/gpu/mpl_gpu_hip.c b/src/mpl/src/gpu/mpl_gpu_hip.c
+index c51f8b3ab9..ccfceaa22f 100644
+--- a/src/mpl/src/gpu/mpl_gpu_hip.c
++++ b/src/mpl/src/gpu/mpl_gpu_hip.c
+@@ -90,7 +90,7 @@ int MPL_gpu_query_pointer_attr(const void *ptr, MPL_pointer_attr_t * attr)
+     hipError_t ret;
+     ret = hipPointerGetAttributes(&attr->device_attr, ptr);
+     if (ret == hipSuccess) {
+-        switch (attr->device_attr.memoryType) {
++        switch (attr->device_attr.type) {
+             case hipMemoryTypeHost:
+                 attr->type = MPL_GPU_POINTER_REGISTERED_HOST;
+                 attr->device = attr->device_attr.device;
+@@ -98,14 +98,16 @@ int MPL_gpu_query_pointer_attr(const void *ptr, MPL_pointer_attr_t * attr)
+             case hipMemoryTypeDevice:
+                 attr->type = MPL_GPU_POINTER_DEV;
+                 attr->device = attr->device_attr.device;
++                break;
++            case hipMemoryTypeUnregistered:
++                attr->type = MPL_GPU_POINTER_UNREGISTERED_HOST;
++                attr->device = -1;
++                break;
++            case hipMemoryTypeManaged:
++                attr->type = MPL_GPU_POINTER_MANAGED;
++                attr->device = attr->device_attr.device;
++                break;
+         }
+-        if (attr->device_attr.isManaged) {
+-            attr->type = MPL_GPU_POINTER_MANAGED;
+-            attr->device = attr->device_attr.device;
+-        }
+-    } else if (ret == hipErrorInvalidValue) {
+-        attr->type = MPL_GPU_POINTER_UNREGISTERED_HOST;
+-        attr->device = -1;
+     } else {
+         goto fn_fail;
+     }

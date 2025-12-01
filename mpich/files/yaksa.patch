@@ -1,0 +1,38 @@
+diff --git a/src/backend/hip/pup/yaksuri_hipi_get_ptr_attr.c b/src/backend/hip/pup/yaksuri_hipi_get_ptr_attr.c
+index 0d3d072..49b83be 100644
+--- a/src/backend/hip/pup/yaksuri_hipi_get_ptr_attr.c
++++ b/src/backend/hip/pup/yaksuri_hipi_get_ptr_attr.c
+@@ -11,13 +11,13 @@
+ 
+ static void attr_convert(struct hipPointerAttribute_t cattr, yaksur_ptr_attr_s * attr)
+ {
+-    if (cattr.memoryType == hipMemoryTypeHost) {
++    if (cattr.type == hipMemoryTypeHost) {
+         attr->type = YAKSUR_PTR_TYPE__REGISTERED_HOST;
+         attr->device = -1;
+     } else if (cattr.isManaged) {
+         attr->type = YAKSUR_PTR_TYPE__MANAGED;
+         attr->device = -1;
+-    } else if (cattr.memoryType == hipMemoryTypeDevice) {
++    } else if (cattr.type == hipMemoryTypeDevice) {
+         attr->type = YAKSUR_PTR_TYPE__GPU;
+         attr->device = cattr.device;
+     } else {
+@@ -46,7 +46,7 @@ int yaksuri_hipi_get_ptr_attr(const void *inbuf, void *outbuf, yaksi_info_s * in
+         if (cerr == hipErrorInvalidValue) {
+             /* attr.memoryType = hipMemoryTypeUnregistered;  */
+             /* HIP does not seem to have something corresponding to cudaMemoryTypeUnregistered */
+-            attr.memoryType = -1;
++            attr.type = -1;
+             attr.device = -1;
+             cerr = hipSuccess;
+         }
+@@ -62,7 +62,7 @@ int yaksuri_hipi_get_ptr_attr(const void *inbuf, void *outbuf, yaksi_info_s * in
+         if (cerr == hipErrorInvalidValue) {
+             /* attr.memoryType = hipMemoryTypeUnregistered; */
+             /* HIP does not seem to have something corresponding to cudaMemoryTypeUnregistered */
+-            attr.memoryType = -1;
++            attr.type = -1;
+             attr.device = -1;
+             cerr = hipSuccess;
+         }
