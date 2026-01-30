@@ -1,34 +1,54 @@
 versions:
-  - spec:
-      - 3.4.3
-      - 4.3.0
+- spec:
+  - 3.4.3
+  - 4.3.2
 dependencies:
-  - spec: ubuntu
-    when: distro=ubuntu
-  - spec: opensuse
-    when: distro=opensuse
-  - spec: rockylinux
-    when: distro=rockylinux
-  - spec: gcc
-  - spec: rocm
-    when: rocm
-    scope: build
-  - spec: llvm
-    when: llvm
-    scope: build
-  - spec: ucx
-    when: ucx
-    scope: build
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: gcc
+- spec: xpmem
+- spec: rocm
+  when: rocm
+  scope: build
+- spec: ucx
+  when: ucx
+  scope: build
+- spec: libfabric
+  when: libfabric
+  scope: build
 variables:
-  - name: prefix
-    value: "/opt"
-  - name: rocm_flags
-    value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}/hip'
-    when: rocm
-    scope: build
-  - name: netmod
-    value: ofi
-  - name: netmod
-    value: ucx
-    when: ucx
-    scope: build
+- name: prefix
+  value: "/opt"
+- name: configure_flags
+  value: >-
+    --enable-fast=O3
+    --disable-cxx
+    --enable-threads=multiple
+    --enable-nemesis-shm-collectives
+    --with-ch4-shmmods=auto
+    --with-xpmem
+    --with-pm=none
+    --with-pmi2-include=/usr/include/slurm
+    --with-pmi2-lib=/usr
+- name: ucx_flags
+  value: "--with-ucx={{ prefix }}/ucx/{{ __ucx__version__ }}"
+  when: ^ucx
+- name: libfabric_flags
+  value: "--with-libfabric={{ prefix }}/libfabric/{{ __libfabric__version__ }}"
+  when: ^libfabric
+- name: netmods
+  value: ucx
+  when: ^ucx
+- name: netmods
+  value: ofi
+  when: ^libfabric
+- name: netmods
+  value: ucx,ofi
+  when: ^ucx ^libfabric
+- name: rocm_flags
+  value: "--with-hip=/opt/rocm-{{ __rocm__version__ }}"
+  when: ^rocm

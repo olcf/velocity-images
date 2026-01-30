@@ -1,11 +1,15 @@
 versions:
-  - spec:
-      - 0.0.0-latest
+- spec:
+  - 2.7.4
+  when: backend=apptainer
 dependencies:
-  - spec: opensuse
-    when: distro=opensuse
-  - spec: rockylinux
-    when: distro=rockylinux
-  - spec: ubuntu
-    when: distro=ubuntu
-  - spec: gcc@0
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: gcc
+arguments:
+- value: --bind /lib/modules/$(uname -r)/build:/lib/modules/$(uname -r)/build
+  when: backend=apptainer

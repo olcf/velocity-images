@@ -2,9 +2,7 @@
     {{ __base__ }}
 
 @run
-    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 && apt clean ??
-    ?? distro=opensuse |> zypper --non-interactive install wget tar gzip file make && zypper clean --all ??
-    ?? distro=rockylinux |> dnf -y install wget diffutils file perl && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 libpmi0-dev libpmi2-0-dev libslurm-dev && apt clean ??
     >>> test gcc version and add fortran flag if gcc version >= 10
     if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then \
         export FFLAGS=-fallow-argument-mismatch; \
@@ -12,11 +10,12 @@
     >>> install
     wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     tar xzf mpich-{{ __version__ }}.tar.gz
-    cd mpich-{{ __version__ }}
-    ./configure --with-device=ch4:{{ netmod }} --prefix={{ prefix }}/mpich/{{ __version__ }} {{ rocm_flags }}
+    mkdir build && cd build
+    ../mpich-{{ __version__ }}/configure --with-device=ch4:{{ netmods }} --prefix={{ prefix }}/mpich/{{ __version__ }} \
+    {{ configure_flags }} {{ ucx_flags }} {{ libfabric_flags }} {{ rocm_flags }}
     make install -j{{ __threads__ }}
     cd /
-    rm -rf mpich-{{ __version__ }}/ mpich-{{ __version__ }}.tar.gz
+    rm -rf build mpich-{{ __version__ }} mpich-{{ __version__ }}.tar.gz
 
 @env
     MPICH_VERSION {{ __version__ }}
@@ -26,3 +25,16 @@
     LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LIBRARY_PATH
     LD_LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LD_LIBRARY_PATH
     MANPATH {{ prefix }}/mpich/{{ __version__ }}/share/man:$MANPATH
+
+@post
+    %environment
+    >>> Detect network type and set MPICH netmod
+    if ls /sys/class/net | grep -q "hsn[0-9]"; then
+        export MPIR_CVAR_CH4_NETMOD=ofi
+        echo "Setting MPIR_CVAR_CH4_NETMOD=ofi for Slingshot"
+    elif ls /sys/class/net | grep -q "ib[0-9]"; then
+        export MPIR_CVAR_CH4_NETMOD=ucx
+        echo "Setting MPIR_CVAR_CH4_NETMOD=ucx for InfiniBand"
+    else
+        echo "Cannot determine network type; MPIR_CVAR_CH4_NETMOD unchanged"
+    fi

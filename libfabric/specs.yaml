@@ -1,0 +1,30 @@
+versions:
+- spec:
+  - 2.4.0
+dependencies:
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: gcc
+- spec: cxi
+- spec: xpmem
+variables:
+- name: prefix
+  value: "/opt"
+- name: configure_flags
+  value: >-
+    --enable-only
+    --enable-cxi
+    --enable-udp
+    --enable-tcp
+    --enable-rxm
+    --enable-rxd
+    --enable-shm
+    --enable-sm2
+    --enable-hook_debug
+    --enable-hook_hmem
+    --enable-dmabuf_peer_mem
+    --enable-xpmem=/usr/local

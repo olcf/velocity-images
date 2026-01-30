@@ -1,0 +1,14 @@
+versions:
+- spec:
+  - 7.5.2
+dependencies:
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: mpich
+variables:
+- name: prefix
+  value: "/opt"

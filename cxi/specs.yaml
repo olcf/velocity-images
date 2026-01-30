@@ -1,0 +1,15 @@
+versions:
+- spec:
+  - 12.0.2
+dependencies:
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+variables:
+- name: prefix
+  value: "/opt"
+files:
+- name: libcxi.patch

@@ -1,13 +1,16 @@
 @from
     {{ __base__ }}
 
+@pre
+    ?? backend=apptainer |> %setup ??
+    ?? backend=apptainer |> mkdir -p ${APPTAINER_ROOTFS}/lib/modules/$(uname -r)/build ??
+
 @run
-    >>>?? distro=ubuntu |> apt -y install git make autoconf automake linux-headers-$(uname -r) kmod pkg-config libtool git && apt clean ??
-    >>>?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
-    ?? distro=rockylinux |> dnf -y install git autoconf automake libtool file kernel-$(uname -r) && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install git make autoconf automake libtool libelf-dev && apt clean ??
     >>> install
-    git clone https://github.com/hpc/xpmem.git
+    git clone https://github.com/openucx/xpmem.git
     cd xpmem
+    git checkout v{{ __version__ }}
     ./autogen.sh
     ./configure
     make
@@ -16,9 +19,3 @@
 
 @env
     XPMEM_VERSION {{ __version__ }}
-    PATH /opt/knem/bin:$PATH
-    LIBRARY_PATH /opt/knem/lib64:$LIBRARY_PATH
-    LD_LIBRARY_PATH /opt/knem/lib64:$LD_LIBRARY_PATH
-    C_INCLUDE_PATH /opt/knem/include:$C_INCLUDE_PATH
-    CPLUS_INCLUDE_PATH /opt/knem/include:$CPLUS_INCLUDE_PATH
-    MANPATH /opt/knem/share/man:$MANPATH

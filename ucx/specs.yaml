@@ -1,57 +1,49 @@
 versions:
-  - spec:
-      - 1.14.0
+- spec:
+  - 1.19.1
 dependencies:
-  - spec: opensuse
-    when: distro=opensuse
-  - spec: rockylinux
-    when: distro=rockylinux
-  - spec: ubuntu
-    when: distro=ubuntu
-  - spec: gcc
-  #- spec: knem
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: gcc
+- spec: xpmem
 variables:
-  - name: prefix
-    value: "/opt"
-  - name: ubuntu_packages
-    value: >-
-      wget
-      gcc
-      g++
-      gfortran
-      libnuma-dev
-      librdmacm-dev
-  - name: build_options
-    # --enable-compiler-opt=3
-    value: >-
-      --enable-numa
-      --enable-cma
-      --enable-shared
-      --enable-static
-      --with-pic
-      --with-dc
-      --with-dm
-      --with-ib-hw-tm
-      --without-knem
-      --with-rc
-      --with-ud
-      --without-xpmem
-      --with-mlx5-dv
-      --with-rdmacm
-      --with-verbs
-      --with-avx
-      --with-sse42
-      --disable-assertions
-      --disable-doxygen-doc
-      --disable-gtest
-      --disable-logging
-      --disable-mt
-      --disable-optimizations
-      --disable-params-check
-      --without-bfd
-      --without-cuda
-      --without-fuse3
-      --without-gdrcopy
-      --without-go
-      --without-java
-      --without-rocm
+- name: prefix
+  value: "/opt"
+- name: configure_flags
+  value: >-
+    --enable-numa
+    --enable-compiler-opt=3
+    --enable-cma
+    --enable-mt
+    --enable-shared
+    --enable-static
+    --with-pic
+    --with-dc
+    --with-dm
+    --with-ib-hw-tm
+    --with-rc
+    --with-ud
+    --with-xpmem
+    --with-mlx5
+    --with-rdmacm
+    --with-verbs
+    --with-avx
+    --disable-assertions
+    --disable-doxygen-doc
+    --disable-gtest
+    --disable-logging
+    --disable-openmp
+    --disable-optimizations
+    --disable-params-check
+    --without-bfd
+    --without-cuda
+    --without-fuse3
+    --without-gdrcopy
+    --without-go
+    --without-java
+    --without-rocm
+    --without-knem
