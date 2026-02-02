@@ -1,5 +1,6 @@
 versions:
 - spec:
+  - 12.0.1
   - 12.0.2
 dependencies:
 - spec: opensuse
@@ -8,6 +9,7 @@ dependencies:
   when: distro=rockylinux
 - spec: ubuntu
   when: distro=ubuntu
+- spec: gcc
 variables:
 - name: prefix
   value: "/opt"

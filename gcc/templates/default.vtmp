@@ -25,4 +25,3 @@
     LD_LIBRARY_PATH {{ prefix }}/gcc/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
     C_INCLUDE_PATH {{ prefix }}/gcc/{{ __version__ }}/include:$C_INCLUDE_PATH
     CPLUS_INCLUDE_PATH {{ prefix }}/gcc/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
-    MANPATH {{ prefix }}/gcc/{{ __version__ }}/share/man:$MANPATH

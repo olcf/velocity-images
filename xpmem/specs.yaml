@@ -13,3 +13,6 @@ dependencies:
 arguments:
 - value: --bind /lib/modules/$(uname -r)/build:/lib/modules/$(uname -r)/build
   when: backend=apptainer
+variables:
+- name: prefix
+  value: "/opt"

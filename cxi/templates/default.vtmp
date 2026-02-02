@@ -5,7 +5,9 @@
     libcxi.patch /libcxi.patch
 
 @run
+    ?? distro=opensuse |> zypper --non-interactive install python3 make automake fuse-devel git libconfig-devel libnl3-devel libnuma-devel libsensors4-devel libtool libuv-devel libyaml-devel && zypper clean --all ??
     ?? distro=ubuntu |> apt -y install autoconf git libnl-3-dev libconfig++-dev libfuse-dev libjson-c-dev libnuma-dev libsensors-dev libtool libuv1-dev libyaml-dev make pkg-config python3 m4 && apt clean ??
+    ?? distro=rockylinux |> dnf -y install autoconf diffutils fuse-devel git libconfig-devel libnl3-devel libtool libuv-devel libyaml-devel lm_sensors-devel numactl-devel && dnf clean all ??
     >>> shs-cassini-headers
     git clone https://github.com/HewlettPackard/shs-cassini-headers.git
     cd shs-cassini-headers

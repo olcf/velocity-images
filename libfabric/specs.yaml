@@ -11,6 +11,9 @@ dependencies:
 - spec: gcc
 - spec: cxi
 - spec: xpmem
+- spec: rocm
+  when: rocm
+  scope: build
 variables:
 - name: prefix
   value: "/opt"
@@ -27,4 +30,7 @@ variables:
     --enable-hook_debug
     --enable-hook_hmem
     --enable-dmabuf_peer_mem
-    --enable-xpmem=/usr/local
+    --enable-xpmem={{ prefix }}/xpmem/{{ __xpmem__version__ }}
+- name: rocm_flags
+  value: --with-rocr=/opt/rocm-{{ __rocm__version__ }}
+  when: ^rocm

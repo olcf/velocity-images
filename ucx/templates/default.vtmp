@@ -2,7 +2,9 @@
     {{ __base__ }}
 
 @run
+    ?? distro=opensuse |> zypper --non-interactive install wget gzip libnuma-devel librdmacm-devel && zypper clean --all ??
     ?? distro=ubuntu |> apt -y install wget libnuma-dev librdmacm-dev make pkg-config && apt clean ??
+    ?? distro=rockylinux |> dnf -y install wget numactl-devel rdma-core-devel && dnf clean all ??
     wget https://github.com/openucx/ucx/releases/download/v{{ __version__ }}/ucx-{{ __version__ }}.tar.gz
     tar -xzf ucx-{{ __version__ }}.tar.gz
     mkdir build && cd build

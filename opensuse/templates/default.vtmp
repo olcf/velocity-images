@@ -5,4 +5,3 @@
     zypper --non-interactive refresh
     zypper --non-interactive update
     zypper clean --all
-
