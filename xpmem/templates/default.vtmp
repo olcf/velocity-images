@@ -1,10 +1,6 @@
 @from
     {{ __base__ }}
 
-@pre
-    ?? backend=apptainer |> %setup ??
-    ?? backend=apptainer |> mkdir -p ${APPTAINER_ROOTFS}/lib/modules/$(uname -r)/build ??
-
 @run
     ?? distro=opensuse |> zypper --non-interactive install automake git libelf-devel libtool make && zypper clean --all ??
     ?? distro=ubuntu |> apt -y install git make automake libtool libelf-dev && apt clean ??
@@ -14,7 +10,7 @@
     cd xpmem
     git checkout v{{ __version__ }}
     ./autogen.sh
-    ./configure --prefix={{ prefix }}/xpmem/{{ __version__ }}
+    ./configure --prefix={{ prefix }}/xpmem/{{ __version__ }} --disable-kernel-module
     make
     make install
     cd .. && rm -r xpmem

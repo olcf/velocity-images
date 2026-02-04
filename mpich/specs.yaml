@@ -40,15 +40,17 @@ variables:
 - name: libfabric_flags
   value: "--with-libfabric={{ prefix }}/libfabric/{{ __libfabric__version__ }}"
   when: ^libfabric
+- name: netmods # default build libfabric (may be internal build)
+  value: ofi
 - name: netmods
   value: ucx
   when: ^ucx
 - name: netmods
-  value: ofi
-  when: ^libfabric
-- name: netmods
-  value: ucx,ofi
-  when: ^ucx ^libfabric
+  value: ofi,ucx
+  when: ^libfabric ^ucx
 - name: rocm_flags
   value: "--with-hip=/opt/rocm-{{ __rocm__version__ }}"
   when: ^rocm
+files:
+- name: netmod.sh
+  when: ^libfabric ^ucx

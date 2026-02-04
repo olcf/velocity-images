@@ -1,7 +1,6 @@
 versions:
 - spec:
   - 2.7.4
-  when: backend=apptainer
 dependencies:
 - spec: opensuse
   when: distro=opensuse
@@ -10,9 +9,6 @@ dependencies:
 - spec: ubuntu
   when: distro=ubuntu
 - spec: gcc
-arguments:
-- value: --bind /lib/modules/$(uname -r)/build:/lib/modules/$(uname -r)/build
-  when: backend=apptainer
 variables:
 - name: prefix
   value: "/opt"
