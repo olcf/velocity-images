@@ -54,3 +54,5 @@ variables:
 files:
 - name: netmod.sh
   when: ^libfabric ^ucx
+- name: entrypoint.sh
+  when: ^libfabric ^ucx backend=podman

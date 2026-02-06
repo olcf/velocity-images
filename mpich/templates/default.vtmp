@@ -2,7 +2,8 @@
     {{ __base__ }}
 
 @copy
-    ?? ^ucx ^libfabric |> netmod.sh /netmod.sh ??
+    ?? ^libfabric ^ucx |> netmod.sh /.singularity.d/env/99-netmod.sh ??
+    ?? ^libfabric ^ucx backend=podman |> entrypoint.sh /entrypoint.sh ??
 
 @run
     ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 && apt clean ??
@@ -21,6 +22,7 @@
     make install -j{{ __threads__ }}
     cd /
     rm -rf build mpich-{{ __version__ }} mpich-{{ __version__ }}.tar.gz
+    ?? ^libfabric ^ucx backend=podman |> chmod +x /entrypoint.sh ??
 
 @env
     MPICH_VERSION {{ __version__ }}
@@ -29,8 +31,7 @@
     PATH {{ prefix }}/mpich/{{ __version__ }}/bin:$PATH
     LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LIBRARY_PATH
     LD_LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LD_LIBRARY_PATH
-    MANPATH {{ prefix }}/mpich/{{ __version__ }}/share/man:$MANPATH
 
 @post
-    ?? ^ucx ^libfabric |> %environment ??
-    ?? ^ucx ^libfabric |> source /netmod.sh ??
+    ?? ^libfabric ^ucx backend=podman |> ENTRYPOINT ["/entrypoint.sh"] ??
+    ?? ^libfabric ^ucx backend=podman |> CMD ["/bin/bash"] ??

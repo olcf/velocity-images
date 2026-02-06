@@ -6,3 +6,6 @@
     apt update --fix-missing
     apt -y upgrade
     apt clean
+
+@env
+    TAR_OPTIONS --no-same-owner
