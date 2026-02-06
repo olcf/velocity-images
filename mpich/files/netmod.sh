@@ -3,7 +3,7 @@
 # check if MPIR_CVAR_CH4_NETMOD has already been defined
 if [ -z "${MPIR_CVAR_CH4_NETMOD}" ]; then
     # export SLURM_PROCID if it exists
-    for kv in "${__exported_env__}"; do
+    for kv in ${__exported_env__}; do
         case "${kv}" in
             SLURM_PROCID=*)
                 export "${kv}";
