@@ -1,5 +1,9 @@
 versions:
 - spec:
+  - 1.21.1
+  - 2.1.0
+  - 2.2.0
+  - 2.3.1
   - 2.4.0
 dependencies:
 - spec: opensuse
