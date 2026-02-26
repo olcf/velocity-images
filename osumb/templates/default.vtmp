@@ -5,7 +5,7 @@
     wget https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-{{ __version__ }}.tar.gz
     tar -xzf osu-micro-benchmarks-{{ __version__ }}.tar.gz
     mkdir build && cd build
-    ../osu-micro-benchmarks-{{ __version__ }}/configure CC=mpicc CXX=mpicc --prefix={{ prefix }}/osumb/{{ __version__ }}
+    ../osu-micro-benchmarks-{{ __version__ }}/configure CC=mpicc CXX=mpicc --prefix={{ prefix }}/osumb/{{ __version__ }} {{ rocm_flags }}
     make -j{{ __threads__ }}
     make install
     cd /

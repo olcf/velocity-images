@@ -9,6 +9,12 @@ dependencies:
 - spec: ubuntu
   when: distro=ubuntu
 - spec: mpich
+- spec: rocm
+  when: rocm
+  scope: build
 variables:
 - name: prefix
   value: "/opt"
+- name: rocm_flags
+  value: --enable-rocm --with-rocm=/opt/rocm-{{ __rocm__version__ }}
+  when: ^rocm

@@ -35,4 +35,3 @@
 @env
     PATH /opt/rocm-{{ __version__ }}/bin:${PATH}
     LD_LIBRARY_PATH /opt/rocm-{{ __version__ }}/lib:${LD_LIBRARY_PATH}
-
