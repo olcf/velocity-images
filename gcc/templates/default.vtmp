@@ -8,7 +8,7 @@
     if [ "0.0.0-system" = "{{ __version__ }}" ]; then exit 0; fi
     ?? distro=opensuse |> zypper --non-interactive install wget tar gzip bzip2 make perl && zypper clean --all ??
     ?? distro=rockylinux |> dnf -y install wget bzip2 diffutils perl && dnf clean all ??
-    ?? distro=ubuntu |> apt -y install wget bzip2 cmake && apt clean ??
+    ?? distro=ubuntu |> apt -y install wget bzip2 perl make && apt clean ??
     wget --progress=bar:force https://gcc.gnu.org/pub/gcc/releases/gcc-{{ __version__ }}/gcc-{{ __version__ }}.tar.gz
     tar -xzf gcc-{{ __version__ }}.tar.gz
     cd gcc-{{ __version__ }}
@@ -20,6 +20,7 @@
     rm -rf gcc-{{ __version__ }}.tar.gz gcc-{{ __version__ }}
 
 @env
+    GCC_VERSION {{ __version__ }}
     PATH {{ prefix }}/gcc/{{ __version__ }}/bin:$PATH
     LIBRARY_PATH {{ prefix }}/gcc/{{ __version__ }}/lib64:$LIBRARY_PATH
     LD_LIBRARY_PATH {{ prefix }}/gcc/{{ __version__ }}/lib64:$LD_LIBRARY_PATH

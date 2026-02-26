@@ -1,17 +1,19 @@
 versions:
-  - spec:
-      - 0.0.0-system
-      - 12.3.0
-      - 13.2.0
-      - 14.1.0
-      - 14.2.0
+- spec:
+  - 0.0.0-system
+  - 11.5.0
+  - 12.5.0
+  - 13.4.0
+  - 14.3.0
+  - 15.1.0
+  - 15.2.0
 dependencies:
-  - spec: opensuse
-    when: distro=opensuse
-  - spec: rockylinux
-    when: distro=rockylinux
-  - spec: ubuntu
-    when: distro=ubuntu
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
 variables:
-  - name: prefix
-    value: "/opt"
+- name: prefix
+  value: "/opt"
