@@ -6,9 +6,9 @@
     ?? ^libfabric ^ucx backend=podman |> entrypoint.sh /entrypoint.sh ??
 
 @run
-    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 && apt clean ??
-    ?? distro=rockylinux |> dnf -y install wget && dnf clean all ??
-    ?? distro=opensuse |> zypper --non-interactive install wget gzip && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 libhwloc-dev && apt clean ??
+    ?? distro=rockylinux |> dnf -y install wget diffutils file hwloc-devel && dnf clean all ??
+    ?? distro=opensuse |> zypper --non-interactive install wget gzip python3 file hwloc-devel && zypper clean --all ??
     >>> test gcc version and add fortran flag if gcc version >= 10
     if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then \
         export FFLAGS=-fallow-argument-mismatch; \
@@ -28,6 +28,7 @@
     MPICH_VERSION {{ __version__ }}
     MPICH_URL https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     MPICH_DIR {{ prefix }}/mpich/{{ __version__ }}
+    MPICH_ROOT {{ prefix }}/mpich/{{ __version__ }}
     PATH {{ prefix }}/mpich/{{ __version__ }}/bin:$PATH
     LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LIBRARY_PATH
     LD_LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LD_LIBRARY_PATH

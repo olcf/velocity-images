@@ -2,6 +2,7 @@ versions:
 - spec:
   - 3.4.3
   - 4.3.2
+  - 5.0.0
 dependencies:
 - spec: ubuntu
   when: distro=ubuntu
@@ -25,15 +26,19 @@ variables:
   value: "/opt"
 - name: configure_flags
   value: >-
-    --enable-fast=O3
     --disable-cxx
-    --enable-threads=multiple
-    --enable-nemesis-shm-collectives
-    --with-ch4-shmmods=auto
+    --enable-threads=runtime
+    --with-ch4-shmmods=xpmem
     --with-xpmem={{ prefix }}/xpmem/{{ __xpmem__version__ }}
     --with-pm=none
     --with-pmi2-include=/usr/include/slurm
     --with-pmi2-lib=/usr
+    --enable-yield=sched_yield
+    --with-namepublisher=file
+    --enable-fortran
+    --disable-allowport
+    --with-hwloc
+    --enable-mpi-abi
 - name: ucx_flags
   value: "--with-ucx={{ prefix }}/ucx/{{ __ucx__version__ }}"
   when: ^ucx
