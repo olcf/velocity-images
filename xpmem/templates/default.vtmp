@@ -1,0 +1,21 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=opensuse |> zypper --non-interactive install automake git libelf-devel libtool make && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install git make automake libtool libelf-dev && apt clean ??
+    ?? distro=rockylinux |> dnf -y install automake elfutils-libelf-devel git libtool make && dnf clean all ??
+    >>> install
+    git clone https://github.com/openucx/xpmem.git
+    cd xpmem
+    git checkout v{{ __version__ }}
+    ./autogen.sh
+    ./configure --prefix={{ prefix }}/xpmem/{{ __version__ }} --disable-kernel-module
+    make
+    make install
+    cd .. && rm -r xpmem
+
+@env
+    XPMEM_VERSION {{ __version__ }}
+    LIBRARY_PATH {{ prefix }}/xpmem/{{ __version__ }}/lib
+    LD_LIBRARY_PATH {{ prefix }}/xpmem/{{ __version__ }}/lib

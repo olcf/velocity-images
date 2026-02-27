@@ -1,12 +1,6 @@
 versions:
 - spec:
-  - 0.0.0-system
-  - 11.5.0
-  - 12.5.0
-  - 13.4.0
-  - 14.3.0
-  - 15.1.0
-  - 15.2.0
+  - 7.5.2
 dependencies:
 - spec: opensuse
   when: distro=opensuse
@@ -14,6 +8,13 @@ dependencies:
   when: distro=rockylinux
 - spec: ubuntu
   when: distro=ubuntu
+- spec: mpich
+- spec: rocm
+  when: rocm
+  scope: build
 variables:
 - name: prefix
   value: "/opt"
+- name: rocm_flags
+  value: --enable-rocm --with-rocm=/opt/rocm-{{ __rocm__version__ }}
+  when: ^rocm

@@ -1,7 +1,7 @@
 versions:
-  - spec:
-      - 20.04
-      - 22.04
-      - 24.04
-    when: distro=ubuntu
-
+- spec:
+  - 20.04
+  - 22.04
+  - 24.04
+  - 26.04
+  when: distro=ubuntu

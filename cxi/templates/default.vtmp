@@ -1,0 +1,47 @@
+@from
+    {{ __base__ }}
+
+@copy
+    libcxi.patch /libcxi.patch
+
+@run
+    ?? distro=opensuse |> zypper --non-interactive install python3 make automake fuse-devel git libconfig-devel libnl3-devel libnuma-devel libsensors4-devel libtool libuv-devel libyaml-devel && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install autoconf git libnl-3-dev libconfig++-dev libfuse-dev libjson-c-dev libnuma-dev libsensors-dev libtool libuv1-dev libyaml-dev make pkg-config python3 m4 && apt clean ??
+    ?? distro=rockylinux |> dnf -y install autoconf diffutils fuse-devel git libconfig-devel libnl3-devel libtool libuv-devel libyaml-devel lm_sensors-devel numactl-devel && dnf clean all ??
+    >>> shs-cassini-headers
+    git clone https://github.com/HewlettPackard/shs-cassini-headers.git
+    cd shs-cassini-headers
+    git checkout release/shs-{{ __version__ }}
+    mkdir -p {{ prefix }}/cassini-headers/{{ __version__ }}
+    cp -r include {{ prefix }}/cassini-headers/{{ __version__ }}/include
+    cp -r share {{ prefix }}/cassini-headers/{{ __version__ }}/share
+    cd / && rm -rf shs-cassini-headers
+    >>> shs-cxi-driver
+    git clone https://github.com/HewlettPackard/shs-cxi-driver.git
+    cd shs-cxi-driver
+    git checkout release/shs-{{ __version__ }}
+    mkdir -p {{ prefix }}/cxi-driver/{{ __version__ }}
+    cp -r include {{ prefix }}/cxi-driver/{{ __version__ }}/include
+    cd / && rm -rf shs-cxi-driver
+    >>> shs-libcxi
+    git clone https://github.com/HewlettPackard/shs-libcxi.git
+    cd shs-libcxi
+    git checkout release/shs-{{ __version__ }}
+    git apply /libcxi.patch
+    ./autogen.sh
+    ./configure CFLAGS="-I{{ prefix }}/cassini-headers/{{ __version__ }}/include -I{{ prefix }}/cxi-driver/{{ __version__ }}/include" --prefix={{ prefix }}/libcxi/{{ __version__ }}
+    CASSINI_SHARE="{{ prefix }}/cassini-headers/{{ __version__ }}/share" make install
+    mkdir -p {{ prefix }}/libcxi/{{ __version__ }}/include/libcxi
+    cp include/* {{ prefix }}/libcxi/{{ __version__ }}/include/libcxi/
+    cd / && rm -rf shs-libcxi
+
+@env
+    CXI_VERSION {{ __version__ }}
+    C_INCLUDE_PATH {{ prefix }}/cassini-headers/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/cassini-headers/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
+    C_INCLUDE_PATH {{ prefix }}/cxi-driver/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/cxi-driver/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH
+    LIBRARY_PATH {{ prefix }}/cxi-driver/{{ __version__ }}/lib:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/cxi-driver/{{ __version__ }}/lib:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/libcxi/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/libcxi/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH

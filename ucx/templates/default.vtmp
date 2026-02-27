@@ -1,0 +1,27 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=opensuse |> zypper --non-interactive install wget gzip libnuma-devel librdmacm-devel && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install wget libnuma-dev librdmacm-dev make pkg-config && apt clean ??
+    ?? distro=rockylinux |> dnf -y install wget numactl-devel rdma-core-devel && dnf clean all ??
+    wget https://github.com/openucx/ucx/archive/refs/tags/v{{ __version__ }}.tar.gz
+    tar -xzf v{{ __version__ }}.tar.gz
+    cd ucx-{{ __version__ }}
+    autoreconf -ivf
+    cd / && mkdir build && cd build
+    ../ucx-{{ __version__ }}/contrib/configure-release --prefix={{ prefix }}/ucx/{{ __version__ }} \
+        {{ configure_flags }}
+    make -j{{ __threads__ }}
+    make install
+    cd /
+    rm -rf build ucx-{{ __version__ }} ucx-{{ __version__ }}.tar.gz
+
+@env
+    UCX_VERSION {{ __version__ }}
+    UCX_WARN_UNUSED_ENV_VARS n
+    PATH {{ prefix }}/ucx/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/ucx/{{ __version__ }}/lib64:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/ucx/{{ __version__ }}/lib64:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/ucx/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/ucx/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH

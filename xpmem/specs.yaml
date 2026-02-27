@@ -1,12 +1,7 @@
 versions:
 - spec:
-  - 0.0.0-system
-  - 11.5.0
-  - 12.5.0
-  - 13.4.0
-  - 14.3.0
-  - 15.1.0
-  - 15.2.0
+  - 2.6.4
+  - 2.7.4
 dependencies:
 - spec: opensuse
   when: distro=opensuse
@@ -14,6 +9,7 @@ dependencies:
   when: distro=rockylinux
 - spec: ubuntu
   when: distro=ubuntu
+- spec: gcc
 variables:
 - name: prefix
   value: "/opt"

@@ -1,0 +1,20 @@
+@from
+    {{ __base__ }}
+
+@run
+    wget https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-{{ __version__ }}.tar.gz
+    tar -xzf osu-micro-benchmarks-{{ __version__ }}.tar.gz
+    mkdir build && cd build
+    ../osu-micro-benchmarks-{{ __version__ }}/configure CC=mpicc CXX=mpicc --prefix={{ prefix }}/osumb/{{ __version__ }} {{ rocm_flags }}
+    make -j{{ __threads__ }}
+    make install
+    cd /
+    rm -rf build osu-micro-benchmarks-{{ __version__ }} osu-micro-benchmarks-{{ __version__ }}.tar.gz
+
+@env
+    OSUMB_VERSION {{ __version__ }}
+    PATH {{ prefix }}/osumb/{{ __version__ }}/libexec/osu-micro-benchmarks/mpi/pt2pt:$PATH
+    PATH {{ prefix }}/osumb/{{ __version__ }}/libexec/osu-micro-benchmarks/mpi/collective:$PATH
+    PATH {{ prefix }}/osumb/{{ __version__ }}/libexec/osu-micro-benchmarks/mpi/congestion:$PATH
+    PATH {{ prefix }}/osumb/{{ __version__ }}/libexec/osu-micro-benchmarks/mpi/one-sided:$PATH
+    PATH {{ prefix }}/osumb/{{ __version__ }}/libexec/osu-micro-benchmarks/mpi/startup:$PATH

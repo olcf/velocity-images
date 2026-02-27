@@ -1,0 +1,25 @@
+@from
+    {{ __base__ }}
+
+@run
+    ?? distro=opensuse |> zypper --non-interactive install wget bzip2 libcurl-devel libjson-c-devel && zypper clean --all ??
+    ?? distro=ubuntu |> apt -y install wget bzip2 libcurl4-openssl-dev && apt clean ??
+    ?? distro=rockylinux |> dnf -y install bzip2 libcurl-devel json-c-devel wget && dnf clean all ??
+    wget https://github.com/ofiwg/libfabric/releases/download/v{{ __version__ }}/libfabric-{{ __version__ }}.tar.bz2
+    tar -xjf libfabric-{{ __version__ }}.tar.bz2
+    mkdir build && cd build
+    CFLAGS="-I{{ prefix }}/cassini-headers/{{ __cxi__version__ }}/include -I{{ prefix }}/cxi-driver/{{ __cxi__version__ }}/include -I{{ prefix }}/libcxi/{{ __cxi__version__ }}/include -L{{ prefix }}/libcxi/{{ __cxi__version__ }}/lib" \
+    ../libfabric-{{ __version__ }}/configure --prefix={{ prefix }}/libfabric/{{ __version__ }} \
+        {{ configure_flags }} {{ rocm_flags }}
+    make -j{{ __threads__ }}
+    make install
+    cd /
+    rm -rf build libfabric-{{ __version__ }} libfabric-{{ __version__ }}.tar.bz2
+
+@env
+    LIBFABRIC_VERSION {{ __version__ }}
+    PATH {{ prefix }}/libfabric/{{ __version__ }}/bin:$PATH
+    LIBRARY_PATH {{ prefix }}/libfabric/{{ __version__ }}/lib:$LIBRARY_PATH
+    LD_LIBRARY_PATH {{ prefix }}/libfabric/{{ __version__ }}/lib:$LD_LIBRARY_PATH
+    C_INCLUDE_PATH {{ prefix }}/libfabric/{{ __version__ }}/include:$C_INCLUDE_PATH
+    CPLUS_INCLUDE_PATH {{ prefix }}/libfabric/{{ __version__ }}/include:$CPLUS_INCLUDE_PATH

@@ -1,56 +1,63 @@
 versions:
-  - spec:
-      - 3.4.3
-      - 4.1.3
+- spec:
+  - 3.4.3
+  - 4.3.2
+  - 5.0.0
 dependencies:
-  - spec: ubuntu
-    when: distro=ubuntu
-  - spec: opensuse
-    when: distro=opensuse
-  - spec: rockylinux
-    when: distro=rockylinux
-  - spec: gcc
-    when: gcc
-    scope: build
-  - spec: rocm
-    when: rocm
-    scope: build
-  - spec: llvm
-    when: llvm
-    scope: build
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: gcc
+- spec: xpmem
+- spec: rocm
+  when: rocm
+  scope: build
+- spec: ucx
+  when: ucx
+  scope: build
+- spec: libfabric
+  when: libfabric
+  scope: build
 variables:
-  - name: prefix
-    value: "/opt"
-  - name: rocm_flags
-    value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}/hip'
-    when: rocm@:5
-    scope: build
-  - name: rocm_flags
-    value: '--with-hip=/opt/rocm-{{ __rocm__version__ }}'
-    when: "rocm@6:"
-    scope: build
-  # ubuntu packages
-  - name: packages
-    value: "wget gcc g++ gfortran make python3"
-    when: distro=ubuntu
-  - name: packages
-    value: "wget make python3"
-    when: distro=ubuntu ^gcc
-  # opensuse packages
-  - name: packages
-    value: "wget tar gzip gcc gcc-fortran file gcc-c++ make python3 patch"
-    when: distro=opensuse
-  - name: packages
-    value: "wget tar gzip file make python3 patch"
-    when: distro=opensuse ^gcc
-  # rockylinux packages
-  - name: packages
-    value: "wget gcc gcc-c++ gcc-fortran diffutils file perl python3 patch"
-    when: distro=rockylinux
-  - name: packages
-    value: "wget diffutils file perl python3 patch"
-    when: distro=rockylinux ^gcc
+- name: prefix
+  value: "/opt"
+- name: configure_flags
+  value: >-
+    --disable-cxx
+    --enable-threads=runtime
+    --with-ch4-shmmods=xpmem
+    --with-xpmem={{ prefix }}/xpmem/{{ __xpmem__version__ }}
+    --with-pm=none
+    --with-pmi2-include=/usr/include/slurm
+    --with-pmi2-lib=/usr
+    --enable-yield=sched_yield
+    --with-namepublisher=file
+    --enable-fortran
+    --disable-allowport
+    --with-hwloc
+    --enable-mpi-abi
+- name: ucx_flags
+  value: "--with-ucx={{ prefix }}/ucx/{{ __ucx__version__ }}"
+  when: ^ucx
+- name: libfabric_flags
+  value: "--with-libfabric={{ prefix }}/libfabric/{{ __libfabric__version__ }}"
+  when: ^libfabric
+- name: netmods # default build libfabric (may be internal build)
+  value: ofi
+- name: netmods
+  value: ucx
+  when: ^ucx
+- name: netmods
+  value: ofi,ucx
+  when: ^libfabric ^ucx
+- name: rocm_flags
+  value: "--with-hip=/opt/rocm-{{ __rocm__version__ }}"
+  when: ^rocm
 files:
-  - name: mpich.patch
-  - name: yaksa.patch
-
+- name: netmod.sh
+  when: ^libfabric ^ucx
+- name: entrypoint.sh
+  when: ^libfabric ^ucx backend=podman

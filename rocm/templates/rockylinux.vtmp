@@ -5,13 +5,6 @@
     rocm_so.conf rocm_so.conf
 
 @run
-    >>> add repo prerequisite
-    dnf -y install wget
-    wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
-    rpm -ivh epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
-    rm epel-release-latest-{{ __rockylinux__version_major__ }}.noarch.rpm
-    dnf -y install dnf-plugin-config-manager
-    crb enable
     >>> add AMDGPU repo
     echo "[AMDGPU-{{ __version__ }}]" | tee --append /etc/yum.repos.d/amdgpu.repo
     echo "name=AMDGPU{{ __version__ }}" | tee --append /etc/yum.repos.d/amdgpu.repo
@@ -39,4 +32,3 @@
 @env
     PATH /opt/rocm-{{ __version__ }}/bin:${PATH}
     LD_LIBRARY_PATH /opt/rocm-{{ __version__ }}/lib:${LD_LIBRARY_PATH}
-

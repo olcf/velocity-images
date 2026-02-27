@@ -2,13 +2,13 @@
     {{ __base__ }}
 
 @copy
-    mpich.patch /mpich.patch
-    yaksa.patch /yaksa.patch
+    ?? ^libfabric ^ucx |> netmod.sh /.singularity.d/env/99-netmod.sh ??
+    ?? ^libfabric ^ucx backend=podman |> entrypoint.sh /entrypoint.sh ??
 
 @run
-    ?? distro=ubuntu |> apt -y install {{ packages }} && apt clean ??
-    ?? distro=opensuse |> zypper --non-interactive install {{ packages }} && zypper clean --all ??
-    ?? distro=rockylinux |> dnf -y install {{ packages }} && dnf clean all ??
+    ?? distro=ubuntu |> apt -y install wget make pkg-config file python3 libhwloc-dev && apt clean ??
+    ?? distro=rockylinux |> dnf -y install wget diffutils file hwloc-devel && dnf clean all ??
+    ?? distro=opensuse |> zypper --non-interactive install wget gzip python3 file hwloc-devel && zypper clean --all ??
     >>> test gcc version and add fortran flag if gcc version >= 10
     if [ ! -z "$(gcc --version | grep -Eo -m 1 [0-9][0-9]+\.[0-9]+\.[0-9]+ | grep -m 1 [0-9])" ]; then \
         export FFLAGS=-fallow-argument-mismatch; \
@@ -16,25 +16,23 @@
     >>> install
     wget --progress=bar:force https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     tar xzf mpich-{{ __version__ }}.tar.gz
-    cd mpich-{{ __version__ }}
-    >>> TEST
-    if [ "{{ __rocm__version_major__ }}" > "5" ] && [ "{{ __version__ }}" = "4.1.3" ]; then \
-        patch -p1 < /mpich.patch; \
-        cd modules/yaksa; \
-        patch -p1 < /yaksa.patch; \
-        cd ../..; \
-    fi
-    >>> TEST
-    ./configure --with-device=ch4:ofi --prefix={{ prefix }}/mpich/{{ __version__ }} {{ rocm_flags }}
+    mkdir build && cd build
+    ../mpich-{{ __version__ }}/configure --with-device=ch4:{{ netmods }} --prefix={{ prefix }}/mpich/{{ __version__ }} \
+    {{ configure_flags }} {{ ucx_flags }} {{ libfabric_flags }} {{ rocm_flags }}
     make install -j{{ __threads__ }}
     cd /
-    rm -rf mpich-{{ __version__ }}/ mpich-{{ __version__ }}.tar.gz
+    rm -rf build mpich-{{ __version__ }} mpich-{{ __version__ }}.tar.gz
+    ?? ^libfabric ^ucx backend=podman |> chmod +x /entrypoint.sh ??
 
 @env
     MPICH_VERSION {{ __version__ }}
     MPICH_URL https://www.mpich.org/static/downloads/{{ __version__ }}/mpich-{{ __version__ }}.tar.gz
     MPICH_DIR {{ prefix }}/mpich/{{ __version__ }}
+    MPICH_ROOT {{ prefix }}/mpich/{{ __version__ }}
     PATH {{ prefix }}/mpich/{{ __version__ }}/bin:$PATH
     LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LIBRARY_PATH
     LD_LIBRARY_PATH {{ prefix }}/mpich/{{ __version__ }}/lib:$LD_LIBRARY_PATH
-    MANPATH {{ prefix }}/mpich/{{ __version__ }}/share/man:$MANPATH
+
+@post
+    ?? ^libfabric ^ucx backend=podman |> ENTRYPOINT ["/entrypoint.sh"] ??
+    ?? ^libfabric ^ucx backend=podman |> CMD ["/bin/bash"] ??

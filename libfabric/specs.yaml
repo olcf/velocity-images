@@ -1,0 +1,40 @@
+versions:
+- spec:
+  - 1.21.1
+  - 2.1.0
+  - 2.2.0
+  - 2.3.1
+  - 2.4.0
+dependencies:
+- spec: opensuse
+  when: distro=opensuse
+- spec: rockylinux
+  when: distro=rockylinux
+- spec: ubuntu
+  when: distro=ubuntu
+- spec: gcc
+- spec: cxi
+- spec: xpmem
+- spec: rocm
+  when: rocm
+  scope: build
+variables:
+- name: prefix
+  value: "/opt"
+- name: configure_flags
+  value: >-
+    --enable-only
+    --enable-cxi
+    --enable-udp
+    --enable-tcp
+    --enable-rxm
+    --enable-rxd
+    --enable-shm
+    --enable-sm2
+    --enable-hook_debug
+    --enable-hook_hmem
+    --enable-dmabuf_peer_mem
+    --enable-xpmem={{ prefix }}/xpmem/{{ __xpmem__version__ }}
+- name: rocm_flags
+  value: --with-rocr=/opt/rocm-{{ __rocm__version__ }}
+  when: ^rocm

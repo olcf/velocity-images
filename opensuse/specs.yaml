@@ -1,7 +1,7 @@
 versions:
-  - spec:
-      - 15.4
-      - 15.5
-      - 15.6
-    when: distro=opensuse
-
+- spec:
+  - 15.4
+  - 15.5
+  - 15.6
+  - 16.0
+  when: distro=opensuse
