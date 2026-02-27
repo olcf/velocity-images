@@ -1,7 +1,7 @@
 versions:
 - spec:
   - 1.19.1
-  - 1.20.1
+  - 1.20.0
 dependencies:
 - spec: opensuse
   when: distro=opensuse

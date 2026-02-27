@@ -6,3 +6,6 @@
     zypper --non-interactive refresh
     zypper --non-interactive update
     zypper clean --all
+
+@env
+    TAR_OPTIONS --no-same-owner
