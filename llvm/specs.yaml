@@ -5,6 +5,7 @@ versions:
       - 18.1.8
       - 19.1.7
       - 20.1.3
+      - 20.1.8
 dependencies:
   - spec: ubuntu
     when: distro=ubuntu
